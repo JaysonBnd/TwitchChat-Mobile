@@ -62,80 +62,144 @@ export default function TwitchSearch() {
   };
 
   function renderSearchResult({ item }: { item: SearchChannelType }) {
-    if (searchQuery.length == 0) {
+    if (searchQuery.length == 0 || !item) {
       return <></>;
+    } else if (!item.is_live) {
+      return (
+        <Pressable
+          style={({ pressed }) => [
+            {
+              flex: 1,
+              marginVertical: 6,
+              borderRadius: 20 / 2,
+              width: Layout.window.width * 0.95,
+              flexDirection: "row",
+            },
+            pressed
+              ? {
+                  backgroundColor: "#292929",
+                  opacity: 0.5,
+                }
+              : {
+                  backgroundColor: "#333",
+                  opacity: 1,
+                },
+          ]}
+        >
+          <Image
+            style={{
+              width: Layout.window.width * 0.2,
+              marginVertical: 25,
+              marginHorizontal: 15,
+              borderRadius: 100 / 2,
+              aspectRatio: 1,
+            }}
+            source={{ uri: item?.thumbnail_url }}
+          />
+          <View style={{ backgroundColor: "rgba(0,0,0,0)", flex: 1 }}>
+            <View
+              style={{ flexDirection: "row", backgroundColor: "rgba(0,0,0,0)" }}
+            >
+              <Text
+                style={{
+                  fontSize: 17,
+                  color: "white",
+                  marginTop: 10,
+                  fontWeight: "bold",
+                  marginRight: 5,
+                }}
+              >
+                {item?.display_name}
+              </Text>
+            </View>
+          </View>
+        </Pressable>
+      );
     }
     return (
       <Pressable
         style={({ pressed }) => [
           {
             flex: 1,
-            backgroundColor: pressed ? "#606060" : "#303030",
             marginVertical: 3,
             borderRadius: 20 / 2,
             width: Layout.window.width * 0.95,
             flexDirection: "row",
           },
+          pressed
+            ? {
+                backgroundColor: "#292929",
+                opacity: 0.5,
+              }
+            : {
+                backgroundColor: "#333",
+                opacity: 1,
+              },
         ]}
       >
         <Image
           style={{
             width: Layout.window.width * 0.2,
-            margin: 15,
+            marginVertical: 25,
+            marginHorizontal: 15,
             borderRadius: 100 / 2,
             aspectRatio: 1,
           }}
           source={{ uri: item?.thumbnail_url }}
         />
-        <View style={{ backgroundColor: "#303030", flex: 1 }}>
-          <View style={{ flexDirection: "row", backgroundColor: "#303030" }}>
+        <View style={{ backgroundColor: "rgba(0,0,0,0)", flex: 1 }}>
+          <View
+            style={{ flexDirection: "row", backgroundColor: "rgba(0,0,0,0)" }}
+          >
             <Text
               style={{
                 fontSize: 17,
                 color: "white",
                 marginTop: 10,
                 fontWeight: "bold",
+                marginRight: 5,
               }}
             >
               {item?.display_name}
             </Text>
-            {item?.is_live ? (
-              <View
-                style={{
-                  marginTop: 10,
-                  marginLeft: 3,
-                  backgroundColor: "red",
-                  borderWidth: 2,
-                  borderRadius: 20 / 2,
-                  flexDirection: "row",
-                  height: 25,
-                }}
-              >
-                <Text style={{ marginHorizontal: 5 }}>Live</Text>
-                <FontAwesome
-                  name="circle-o"
-                  size={20}
-                  style={{ marginRight: 3 }}
-                />
-              </View>
-            ) : (
-              <></>
-            )}
-          </View>
-          {item?.is_live ? (
-            <Text
+            <View
               style={{
-                fontSize: 12,
-                color: "white",
                 marginTop: 10,
-                flex: 1,
+                marginLeft: 3,
+                backgroundColor: "red",
+                borderWidth: 2,
+                borderRadius: 20 / 2,
+                flexDirection: "row",
+                height: 25,
               }}
             >
-              {item?.title}
-            </Text>
-          ) : (
-            <></>
-          )}
+              <Text style={{ marginHorizontal: 5 }}>Live</Text>
+              <FontAwesome
+                name="circle-o"
+                size={20}
+                style={{ marginRight: 3 }}
+              />
+            </View>
+          </View>
+          <Text
+            style={{
+              fontSize: 14,
+              color: "white",
+              marginTop: 1,
+              flex: 1,
+            }}
+          >
+            {item?.game_name}
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              color: "white",
+              flex: 1,
+            }}
+          >
+            {item?.title}
+          </Text>
         </View>
       </Pressable>
     );
